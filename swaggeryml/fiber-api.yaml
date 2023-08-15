@@ -1,0 +1,113 @@
+openapi: 3.0.3
+info:
+  title: Fiber test project
+  version: v1
+
+tags:
+  - name: Users
+    description: users of the systems
+  - name: Devices
+    description: test bulk upload functionality of gNb device
+servers:
+  - url: http://localhost:8000
+  - url: http://goapi:3001
+
+paths:
+  /api/users:
+    get:
+      tags:
+        - Users
+      description: get all of the users
+      responses:
+        200:
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    first_name:
+                      type: string
+                    last_name:
+                      type: string
+
+                  example:
+                    first_name: Harry
+                    last_name: Potter
+                    id: 5
+    post:
+      tags:
+        - Users
+      description: create a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+      responses:
+        200:
+          description: user creation successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  first_name:
+                    type: string
+                  last_name:
+                    type: string
+                  id:
+                    type: integer
+  /api/devices/csv:
+    post:
+      tags:
+        - Devices
+      description: upload a json or csv file
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        201:
+          description: list of device information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    device_id:
+                      type: string
+                    device_type:
+                      type: string
+                    latitude:
+                      type: number
+                    longitude:
+                      type: number
+                    street_address:
+                      type: string
+        400:
+          description: one or more field do not pass the validation logic
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errMsg:
+                    type: string
+                    example: 'Cannot parse Data entry 2, original error message: strconv.ParseFloat: parsing "65.9a": invalid syntax'

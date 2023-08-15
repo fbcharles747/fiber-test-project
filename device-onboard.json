@@ -1,0 +1,16 @@
+[
+  {
+    "device_id": "GKC89787123",
+    "device_type": "gnb",
+    "latitude": 43.85934385,
+    "longitude": 79.36482826,
+    "street_address": "140 Renfrew Dr, Markham, ON L3R 6B3"
+  },
+  {
+    "device_id": "sdfafd",
+    "device_type": "gnb",
+    "latitude": 13.8,
+    "longitude": 65,
+    "street_address": "32 Edgepark Mews, T3A 4G3"
+  }
+]
