@@ -10,23 +10,23 @@ services:
     ports:
       - 3000:8080
 
-  mysqldb:
-    image: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: "mysql"
-      MYSQL_USER: "user"
-      MYSQL_PASSWORD: "mysql"
-      MYSQL_DATABASE: "user1_db"
-    volumes:
-      - mysql_data:/var/lib/mysql
-    ports:
-      - 3306:3306
+  # mysqldb:
+  #   image: mysql
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: "mysql"
+  #     MYSQL_USER: "user"
+  #     MYSQL_PASSWORD: "mysql"
+  #     MYSQL_DATABASE: "user1_db"
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #   ports:
+  #     - 3306:3306
 
   goapi:
     image: cosmtrek/air
     working_dir: /project-package
-    depends_on:
-      - mysqldb
+    # depends_on:
+    #   - mysqldb
     ports:
       - 8000:3001
     volumes:

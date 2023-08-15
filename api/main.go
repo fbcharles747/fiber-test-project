@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/fbcharles747/fiber-api/database"
+	// "github.com/fbcharles747/fiber-api/database"
 	"github.com/fbcharles747/fiber-api/routes"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -42,7 +42,7 @@ func setupRoutes(app *fiber.App) {
 }
 
 func main() {
-	database.ConnectDb()
+	// database.ConnectDb()
 	app := fiber.New()
 
 	app.Use(cors.New())

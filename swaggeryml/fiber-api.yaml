@@ -111,3 +111,50 @@ paths:
                   errMsg:
                     type: string
                     example: 'Cannot parse Data entry 2, original error message: strconv.ParseFloat: parsing "65.9a": invalid syntax'
+  /api/devices/json:
+    post:
+      tags:
+        - Devices
+      description: bulk upload devices using json file
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    device_id:
+                      type: string
+                    device_type:
+                      type: string
+                    latitude:
+                      type: number
+                    longitude:
+                      type: number
+                  example:
+                    device_id: GKC89787123
+                    device_type: gnb
+                    latitude: 43.85934385
+                    longitude: 79.36482826
+                    street_address: 140 Renfrew Dr, Markham, ON L3R 6B3
+        400:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errMsg:
+                    type: string
+                example:
+                  errMsg: "Wrong file format, this endpoint only accept Json"

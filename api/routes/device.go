@@ -94,30 +94,54 @@ func CreateResponseDevices(devices []*models.CsvDevice) (result *[]models.Respon
 // below is for json file
 // ====================================================================================
 
+func Check(err error) {
+	fmt.Println(err)
+	if err != nil {
+		panic(err)
+	}
+}
+
 type ErrMap map[string][]models.IError
 
+func badrequestHandler(c *fiber.Ctx) error {
+	if r := recover(); r != nil {
+		if err, ok := r.(error); ok {
+			errRes := ErrorResponse{ErrMsg: err.Error()}
+			return c.Status(http.StatusBadRequest).JSON(errRes)
+		}
+	}
+	errRes := ErrorResponse{ErrMsg: "unknown"}
+	return c.Status(http.StatusBadRequest).JSON(errRes)
+}
+
 func BulkUploadJSON(c *fiber.Ctx) error {
+
 	// parse the file
 	fileheader, err := c.FormFile("file")
 	if err != nil {
-		errRes := ErrorResponse{ErrMsg: "File not found"}
-		return c.Status(http.StatusBadRequest).JSON(errRes)
+		resErr := ErrorResponse{ErrMsg: err.Error()}
+		return c.Status(http.StatusBadRequest).JSON(resErr)
+	}
+	if filepath.Ext(fileheader.Filename) != ".json" {
+		responseErr := ErrorResponse{ErrMsg: "Wrong file format, this end point only accept JSON"}
+		return c.Status(http.StatusBadRequest).JSON(responseErr)
 	}
 	filePtr, err := fileheader.Open()
 	if err != nil {
-		errRes := ErrorResponse{ErrMsg: err.Error()}
-		return c.Status(http.StatusBadRequest).JSON(errRes)
+		resErr := ErrorResponse{ErrMsg: err.Error()}
+		return c.Status(http.StatusBadRequest).JSON(resErr)
 	}
 	defer filePtr.Close()
 
 	// decode the file content
 	decoder := json.NewDecoder(filePtr)
-
 	var deviceSlice []models.ResponseDevice
-
-	if err := decoder.Decode(&deviceSlice); err != nil {
-		errRes := ErrorResponse{ErrMsg: err.Error()}
-		return c.Status(http.StatusBadRequest).JSON(errRes)
+	// need to reset err here
+	err = nil
+	err = decoder.Decode(&deviceSlice)
+	if err != nil {
+		resErr := ErrorResponse{ErrMsg: err.Error()}
+		return c.Status(http.StatusBadRequest).JSON(resErr)
 	}
 
 	// validate the file
