@@ -84,11 +84,9 @@ func CreateResponseDevices(devices []*models.CsvDevice) (result *[]models.Respon
 
 Sorry I have not read about the man who create JSON, so not much background and history here. Let's dive right in.
 
-If user like us edit with vscode, we did get an error when we type in invalid character for certain field. This is of course the first line of defense to invalid data type. The second line of defense is the `validator` package that was used a lot in our TOC API. The `validator` package give us an interface named `FieldError` that has serveral method extracting the error detail.
+If user like us edit with vscode, we did get an error when we type in invalid character for certain field. This is of course the first line of defense to invalid data type. The second line of defense is the `error` returned by `decode/json` package, which would generally show what the error looks like.
 
-> I have not fully finish experimenting all method of `FieldError`, so there might still be method that we can use to customize our error message.
-
-The downside is relating to `validator` package as well. From my experiment, the method which is supposed to return the error message return very general detail the error, as shown below. It is smart enough to detect the invalid character, but it doesn't tell the end user which data entry contain the invalid data.
+The downside is relating to `decode/json` package as well. From my experiment, `err.Error()` only tells the user about the invalid character, the error doesn't tell the user which data entry contain incorrect character. 
 
 ![invalid character warning in JSON](rmImg/Screenshot%20from%202023-08-15%2010-50-12.png)
 
